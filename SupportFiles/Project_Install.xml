@@ -2,16 +2,11 @@
   <Add OfficeClientEdition="64" Channel="MonthlyEnterprise" MigrateArch="TRUE">
     <Product ID="ProjectProRetail">
       <Language ID="en-us" />
-      <Language ID="fi-fi" />
       <Language ID="MatchPreviousMSI" />
     </Product>
     <Product ID="LanguagePack">
       <Language ID="en-us" />
-      <Language ID="fi-fi" />
       <Language ID="MatchPreviousMSI" />
-    </Product>
-    <Product ID="ProofingTools">
-      <Language ID="fi-fi" />
     </Product>
   </Add>
   <Property Name="SharedComputerLicensing" Value="0" />
@@ -23,6 +18,9 @@
   <Updates Enabled="TRUE" />
   <RemoveMSI />
   <AppSettings>
+    <Setup Name="Company" Value="" />
     <User Key="software\microsoft\office\16.0\common" Name="sendcustomerdata" Value="0" Type="REG_DWORD" App="office16" Id="L_Sendcustomerdata" />
   </AppSettings>
+  <Display Level="Full" AcceptEULA="TRUE" />
+  <Logging Level="Standard" Path="%SystemDrive%\Windows\Logs\Software" />
 </Configuration>

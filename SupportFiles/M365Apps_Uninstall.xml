@@ -1,10 +1,9 @@
 <Configuration>
 	<Remove>
 		<Product ID="O365ProPlusRetail" >
-			<Language ID="fi-FI" />
 			<Language ID="en-us" />
-		</Product> 
-	</Remove>	
+		</Product>
+	</Remove>
 	<Display Level="None" />
-	<Logging Name="O365ProPlusRetailSetup.txt" Path="%systemdrive%\Windows\CCM\Logs\Software" />	
+	<Logging Name="O365ProPlusRetailSetup.txt" Path="%SystemDrive%\Windows\Logs\Software" />
 </Configuration>

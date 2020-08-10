@@ -2,24 +2,19 @@
   <Add OfficeClientEdition="64" Channel="MonthlyEnterprise" MigrateArch="TRUE">
     <Product ID="O365ProPlusRetail">
       <Language ID="en-us" />
-      <Language ID="fi-fi" />
       <Language ID="MatchPreviousMSI" />
       <ExcludeApp ID="Groove" />
-      <ExcludeApp ID="OneDrive" />
+      <ExcludeApp ID="OneNote" />
       <ExcludeApp ID="Lync" />
       <ExcludeApp ID="Bing" />
     </Product>
     <Product ID="LanguagePack">
       <Language ID="en-us" />
-      <Language ID="fi-fi" />
       <Language ID="MatchPreviousMSI" />
       <ExcludeApp ID="Groove" />
       <ExcludeApp ID="OneDrive" />
       <ExcludeApp ID="Lync" />
       <ExcludeApp ID="Bing" />
-    </Product>
-    <Product ID="ProofingTools">
-      <Language ID="fi-fi" />
     </Product>
   </Add>
   <Property Name="SharedComputerLicensing" Value="0" />
@@ -31,8 +26,13 @@
   <Updates Enabled="TRUE" />
   <RemoveMSI />
   <AppSettings>
+    <Setup Name="Company" Value="" />
     <User Key="software\microsoft\office\16.0\common" Name="sendcustomerdata" Value="0" Type="REG_DWORD" App="office16" Id="L_Sendcustomerdata" />
     <User Key="software\microsoft\office\16.0\common" Name="updatereliabilitydata" Value="1" Type="REG_DWORD" App="office16" Id="L_UpdateReliabilityPolicy" />
+    <User Key="software\microsoft\office\16.0\excel\options" Name="defaultformat" Value="51" Type="REG_DWORD" App="excel16" Id="L_SaveExcelfilesas" />
+    <User Key="software\microsoft\office\16.0\powerpoint\options" Name="defaultformat" Value="27" Type="REG_DWORD" App="ppt16" Id="L_SavePowerPointfilesas" />
+    <User Key="software\microsoft\office\16.0\word\options" Name="defaultformat" Value="" Type="REG_SZ" App="word16" Id="L_SaveWordfilesas" />
   </AppSettings>
   <Display Level="Full" AcceptEULA="TRUE" />
+  <Logging Level="Standard" Path="%SystemDrive%\Windows\Logs\Software" />
 </Configuration>

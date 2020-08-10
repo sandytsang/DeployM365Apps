@@ -1,12 +1,9 @@
 <Configuration>
 	<Remove>
-		<Product ID="ProjectProRetail" >
-			<Language ID="fi-FI" />
+		<Product ID="ProjectProRetail">
 			<Language ID="en-us" />
-		</Product> 
-	</Remove>	
-	<Display Level="None" />
-	<Logging Name="ProjectProRetailUninstall.txt" Path="%systemdrive%\Windows\CCM\Logs\Software" />	
+		</Product>
+	</Remove>
+  <Display Level="Full" />
+	<Logging Name="ProjectProRetailUninstall.txt" Path="%SystemDrive%\Windows\Logs\Software" />
 </Configuration>
-
-
