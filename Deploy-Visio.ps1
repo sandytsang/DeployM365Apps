@@ -149,7 +149,7 @@ Try {
 
 		## <Perform Post-Installation tasks here>
 		## Popup notification for restart
-		Show-InstallationRestartPrompt -Countdownseconds 4500 -CountdownNoHideSeconds 600	
+		Show-InstallationRestartPrompt -Countdownseconds 4500 -CountdownNoHideSeconds 600
 
 		## Display a message at the end of the install
 		#If (-not $useDefaultMsi) { Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait }
