@@ -116,7 +116,7 @@ Try {
 		##*===============================================
 		[string]$installPhase = 'Pre-Installation'
 
-		## Show Welcome Message, close Internet Explorer if required, allow up to 3 deferrals, verify there is enough disk space to complete the install, and persist the prompt
+    ## Show Welcome Message, close required applications, allow up to 3 deferrals, verify there is enough disk space to complete the install, and persist the prompt
 		Show-InstallationWelcome -CloseApps "MSACCESS,EXCEL,INFOPATH,ONENOTEM,GROOVE,ONENOTE,OUTLOOK,POWERPNT,WINPROJ,MSPUB,SPDESIGN,lync,VISIO,WINWORD,Teams,Onedrive" -AllowDeferCloseApps -AllowDefer -DeferDays "1" -CloseAppsCountdown "5400" -PersistPrompt -BlockExecution
 
 		## Show Progress Message (with the default message)
@@ -137,11 +137,10 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirSupportFiles\Project_Install.xml`""
-			
-		## Force update group policy
-		gpupdate /force /wait:0
+		Execute-Process -Path "$dirFiles\setup.exe" -WaitForMsiExec "/configure `"$dirSupportFiles\Project_Install.xml`""
 
+		## Force update group policy
+    Invoke-GPUpdate -RandomDelayInMinutes 0 -Force -Verbose
 
 		##*===============================================
 		##* POST-INSTALLATION
@@ -162,7 +161,7 @@ Try {
 		##*===============================================
 		[string]$installPhase = 'Pre-Uninstallation'
 
-		## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
+    ## Show Welcome Message, close required applications with a 60 second countdown before automatically closing
 		Show-InstallationWelcome -CloseApps "MSACCESS,EXCEL,INFOPATH,ONENOTEM,GROOVE,ONENOTE,OUTLOOK,POWERPNT,WINPROJ,MSPUB,SPDESIGN,lync,VISIO,WINWORD,Teams,Onedrive" -AllowDeferCloseApps -AllowDefer -DeferDays "1" -CloseAppsCountdown "5400" -PersistPrompt -BlockExecution
 
 		## Show Progress Message (with the default message)
@@ -183,7 +182,7 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirSupportFiles\Project_Uninstall.xml`""			
+		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirSupportFiles\Project_Uninstall.xml`""
 
 		##*===============================================
 		##* POST-UNINSTALLATION

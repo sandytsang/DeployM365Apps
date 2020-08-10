@@ -137,11 +137,10 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirSupportFiles\Visio_Install.xml`""
-			
-		## Force update group policy
-		gpupdate /force /wait:0
+		Execute-Process -Path "$dirFiles\setup.exe" -WaitForMsiExec "/configure `"$dirSupportFiles\Visio_Install.xml`""
 
+		## Force update group policy
+    Invoke-GPUpdate -RandomDelayInMinutes 0 -Force -Verbose
 
 		##*===============================================
 		##* POST-INSTALLATION
@@ -162,14 +161,13 @@ Try {
 		##*===============================================
 		[string]$installPhase = 'Pre-Uninstallation'
 
-		## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
+    ## Show Welcome Message, close required applications with a 60 second countdown before automatically closing
 		Show-InstallationWelcome -CloseApps "MSACCESS,EXCEL,INFOPATH,ONENOTEM,GROOVE,ONENOTE,OUTLOOK,POWERPNT,WINPROJ,MSPUB,SPDESIGN,lync,VISIO,WINWORD,Teams,Onedrive" -AllowDeferCloseApps -AllowDefer -DeferDays "1" -CloseAppsCountdown "5400" -PersistPrompt -BlockExecution
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress -StatusMessage "We are remvoing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
 
 		## <Perform Pre-Uninstallation tasks here>
-
 
 		##*===============================================
 		##* UNINSTALLATION
@@ -183,7 +181,7 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirSupportFiles\Visio_Uninstall.xml`""			
+		Execute-Process -Path "$dirFiles\setup.exe" -WaitForMsiExec "/configure `"$dirSupportFiles\Visio_Uninstall.xml`""
 
 		##*===============================================
 		##* POST-UNINSTALLATION
@@ -191,7 +189,6 @@ Try {
 		[string]$installPhase = 'Post-Uninstallation'
 
 		## <Perform Post-Uninstallation tasks here>
-
 
 	}
 	ElseIf ($deploymentType -ieq 'Repair')
