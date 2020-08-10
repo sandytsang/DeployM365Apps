@@ -137,7 +137,7 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirFiles\Project_Install.xml`""
+		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirSupportFiles\Project_Install.xml`""
 			
 		## Force update group policy
 		gpupdate /force /wait:0
@@ -183,7 +183,7 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirFiles\Project_Uninstall.xml`""			
+		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirSupportFiles\Project_Uninstall.xml`""			
 
 		##*===============================================
 		##* POST-UNINSTALLATION
