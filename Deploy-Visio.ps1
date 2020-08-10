@@ -63,13 +63,13 @@ Try {
 	## Variables: Application
 	[string]$appVendor = 'Microsoft'
 	[string]$appName = 'Visio'
-	[string]$appVersion = ''
-	[string]$appArch = 'x64'
-	[string]$appLang = 'EN'
-	[string]$appRevision = '01'
-	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = '07/08/2020'
-	[string]$appScriptAuthor = 'Sandy Zeng'
+  [string]$appVersion = '' # No need to display this!
+  [string]$appArch = 'x64'
+  [string]$appLang = 'EN'
+  [string]$appRevision = '01'
+  [string]$appScriptVersion = '1.1.0'
+  [string]$appScriptDate = '2020/10/08' # YYYY/MM/DD
+  [string]$appScriptAuthor = 'Cameron Kollwitz (Original by Sandy Zeng)'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
 	[string]$installName = ''
