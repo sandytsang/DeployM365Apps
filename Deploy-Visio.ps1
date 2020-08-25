@@ -1,4 +1,7 @@
 ﻿<#
+  https://github.com/cameronkollwitz/DeployM365Apps/
+#>
+<#
 .SYNOPSIS
 	This script performs the installation or uninstallation of an application(s).
 	# LICENSE #

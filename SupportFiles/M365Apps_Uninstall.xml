@@ -1,9 +1,9 @@
 <Configuration>
 	<Remove>
-		<Product ID="O365ProPlusRetail" >
+		<Product ID="O365ProPlusRetail">
 			<Language ID="en-us" />
 		</Product>
 	</Remove>
-	<Display Level="None" />
+  <Display Level="Full" />
 	<Logging Name="O365ProPlusRetailSetup.txt" Path="%SystemDrive%\Windows\Logs\Software" />
 </Configuration>
