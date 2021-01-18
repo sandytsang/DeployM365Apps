@@ -1,5 +1,5 @@
 <Configuration ID="1936281a-92e9-4659-a82c-de1be7772c53">
-  <Add OfficeClientEdition="32" Channel="SemiAnnual" MigrateArch="TRUE">
+  <Add OfficeClientEdition="64" Channel="SemiAnnual" MigrateArch="TRUE">
     <Product ID="ProjectProRetail">
       <Language ID="en-us" />
       <Language ID="MatchPreviousMSI" />
@@ -18,7 +18,7 @@
   <Updates Enabled="TRUE" />
   <RemoveMSI />
   <AppSettings>
-    <Setup Name="Company" Value="McKinstry Co, LLC." />
+    <Setup Name="Company" Value="Company Name" />
     <User Key="software\microsoft\office\16.0\common" Name="sendcustomerdata" Value="0" Type="REG_DWORD" App="office16" Id="L_Sendcustomerdata" />
   </AppSettings>
   <Display Level="Full" AcceptEULA="TRUE" />

@@ -1,7 +1,4 @@
 ﻿<#
-  https://github.com/cameronkollwitz/DeployM365Apps/
-#>
-<#
 .SYNOPSIS
   This script performs the installation or uninstallation of an application(s).
   # LICENSE #
@@ -19,7 +16,7 @@
 .PARAMETER DeployMode
   Specifies whether the installation should be run in Interactive, Silent, or NonInteractive mode. Default is: Interactive. Options: Interactive = Shows dialogs, Silent = No dialogs, NonInteractive = Very silent, i.e. no blocking apps. NonInteractive mode is automatically set if it is detected that the process is not user interactive.
 .PARAMETER AllowRebootPassThru
-  Allows the 3010 return code (requires restart) to be passed back to the parent process (e.g. ConfigMgr) if detected from an installation. If 3010 is passed back to ConfigMgr, a reboot prompt will be triggered.
+  Allows the 3010 return code (requires restart) to be passed back to the parent process (e.g. SCCM) if detected from an installation. If 3010 is passed back to SCCM, a reboot prompt will be triggered.
 .PARAMETER TerminalServerMode
   Changes to "user install mode" and back to "user execute mode" for installing/uninstalling applications for Remote Destkop Session Hosts/Citrix servers.
 .PARAMETER DisableLogging
@@ -42,17 +39,17 @@
 #>
 [CmdletBinding()]
 Param (
-  [Parameter(Mandatory = $false)]
-  [ValidateSet('Install', 'Uninstall', 'Repair')]
+  [Parameter(Mandatory=$false)]
+  [ValidateSet('Install','Uninstall','Repair')]
   [string]$DeploymentType = 'Install',
-  [Parameter(Mandatory = $false)]
-  [ValidateSet('Interactive', 'Silent', 'NonInteractive')]
+  [Parameter(Mandatory=$false)]
+  [ValidateSet('Interactive','Silent','NonInteractive')]
   [string]$DeployMode = 'Interactive',
-  [Parameter(Mandatory = $false)]
+  [Parameter(Mandatory=$false)]
   [switch]$AllowRebootPassThru = $false,
-  [Parameter(Mandatory = $false)]
+  [Parameter(Mandatory=$false)]
   [switch]$TerminalServerMode = $false,
-  [Parameter(Mandatory = $false)]
+  [Parameter(Mandatory=$false)]
   [switch]$DisableLogging = $false
 )
 
@@ -64,14 +61,14 @@ Try {
   ##* VARIABLE DECLARATION
   ##*===============================================
   ## Variables: Application
-  [string]$appVendor = 'Microsoft'
+  [string]$appVendor = 'Microsoft Corporation'
   [string]$appName = '365 Apps for Enterprise'
   [string]$appVersion = '' # No need to display this!
   [string]$appArch = 'x64'
   [string]$appLang = 'EN'
   [string]$appRevision = '01'
-  [string]$appScriptVersion = '1.1.0'
-  [string]$appScriptDate = '2020/10/08' # YYYY/MM/DD
+  [string]$appScriptVersion = '1.2.0'
+  [string]$appScriptDate = '2021-01-17'
   [string]$appScriptAuthor = 'Cameron Kollwitz (Original by Sandy Zeng)'
   ##*===============================================
   ## Variables: Install Titles (Only set here to override defaults set by the toolkit)
@@ -86,8 +83,8 @@ Try {
 
   ## Variables: Script
   [string]$deployAppScriptFriendlyName = 'Deploy Application'
-  [version]$deployAppScriptVersion = [version]'3.8.2'
-  [string]$deployAppScriptDate = '08/05/2020'
+  [version]$deployAppScriptVersion = [version]'3.8.3'
+  [string]$deployAppScriptDate = '30/09/2020'
   [hashtable]$deployAppScriptParameters = $psBoundParameters
 
   ## Variables: Environment
@@ -99,10 +96,11 @@ Try {
     [string]$moduleAppDeployToolkitMain = "$scriptDirectory\AppDeployToolkit\AppDeployToolkitMain.ps1"
     If (-not (Test-Path -LiteralPath $moduleAppDeployToolkitMain -PathType 'Leaf')) { Throw "Module does not exist at the specified location [$moduleAppDeployToolkitMain]." }
     If ($DisableLogging) { . $moduleAppDeployToolkitMain -DisableLogging } Else { . $moduleAppDeployToolkitMain }
-  } Catch {
-    If ($mainExitCode -eq 0) { [int32]$mainExitCode = 60008 }
+  }
+  Catch {
+    If ($mainExitCode -eq 0){ [int32]$mainExitCode = 60008 }
     Write-Error -Message "Module [$moduleAppDeployToolkitMain] failed to load: `n$($_.Exception.Message)`n `n$($_.InvocationInfo.PositionMessage)" -ErrorAction 'Continue'
-    ## Exit the script, returning the exit code to ConfigMgr
+    ## Exit the script, returning the exit code to SCCM
     If (Test-Path -LiteralPath 'variable:HostInvocation') { $script:ExitCode = $mainExitCode; Exit } Else { Exit $mainExitCode }
   }
 
@@ -122,9 +120,10 @@ Try {
     Show-InstallationWelcome -CloseApps "MSACCESS,EXCEL,INFOPATH,ONENOTEM,GROOVE,ONENOTE,OUTLOOK,POWERPNT,WINPROJ,MSPUB,SPDESIGN,lync,VISIO,WINWORD,Teams,Onedrive" -AllowDeferCloseApps -AllowDefer -DeferDays "1" -CloseAppsCountdown "5400" -PersistPrompt -BlockExecution
 
     ## Show Progress Message (with the default message)
-    Show-InstallationProgress -StatusMessage "We are insalling $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
+    Show-InstallationProgress -StatusMessage "We are installing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
 
     ## <Perform Pre-Installation tasks here>
+
 
     ##*===============================================
     ##* INSTALLATION
@@ -133,7 +132,7 @@ Try {
 
     ## Handle Zero-Config MSI Installations
     If ($useDefaultMsi) {
-      [hashtable]$ExecuteDefaultMSISplat = @{ Action = 'Install'; Path = $defaultMsiFile }; If ($defaultMstFile) { $ExecuteDefaultMSISplat.Add('Transform', $defaultMstFile) }
+      [hashtable]$ExecuteDefaultMSISplat =  @{ Action = 'Install'; Path = $defaultMsiFile }; If ($defaultMstFile) { $ExecuteDefaultMSISplat.Add('Transform', $defaultMstFile) }
       Execute-MSI @ExecuteDefaultMSISplat; If ($defaultMspFiles) { $defaultMspFiles | ForEach-Object { Execute-MSI -Action 'Patch' -Path $_ } }
     }
 
@@ -149,12 +148,12 @@ Try {
     [string]$installPhase = 'Post-Installation'
 
     ## <Perform Post-Installation tasks here>
-    ## Popup notification for restart
-    Show-InstallationRestartPrompt -Countdownseconds 4500 -CountdownNoHideSeconds 600
 
     ## Display a message at the end of the install
-    #If (-not $useDefaultMsi) { Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait }
-  } ElseIf ($deploymentType -ieq 'Uninstall') {
+    If (-not $useDefaultMsi) { Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait }
+  }
+  ElseIf ($deploymentType -ieq 'Uninstall')
+  {
     ##*===============================================
     ##* PRE-UNINSTALLATION
     ##*===============================================
@@ -164,7 +163,7 @@ Try {
     Show-InstallationWelcome -CloseApps "MSACCESS,EXCEL,INFOPATH,ONENOTEM,GROOVE,ONENOTE,OUTLOOK,POWERPNT,WINPROJ,MSPUB,SPDESIGN,lync,VISIO,WINWORD,Teams,Onedrive" -AllowDeferCloseApps -AllowDefer -DeferDays "1" -CloseAppsCountdown "5400" -PersistPrompt -BlockExecution
 
     ## Show Progress Message (with the default message)
-    Show-InstallationProgress -StatusMessage "We are remvoing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
+    Show-InstallationProgress -StatusMessage "We are removing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
 
     ## <Perform Pre-Uninstallation tasks here>
 
@@ -175,7 +174,7 @@ Try {
 
     ## Handle Zero-Config MSI Uninstallations
     If ($useDefaultMsi) {
-      [hashtable]$ExecuteDefaultMSISplat = @{ Action = 'Uninstall'; Path = $defaultMsiFile }; If ($defaultMstFile) { $ExecuteDefaultMSISplat.Add('Transform', $defaultMstFile) }
+      [hashtable]$ExecuteDefaultMSISplat =  @{ Action = 'Uninstall'; Path = $defaultMsiFile }; If ($defaultMstFile) { $ExecuteDefaultMSISplat.Add('Transform', $defaultMstFile) }
       Execute-MSI @ExecuteDefaultMSISplat
     }
 
@@ -189,14 +188,16 @@ Try {
 
     ## <Perform Post-Uninstallation tasks here>
 
-  } ElseIf ($deploymentType -ieq 'Repair') {
+  }
+  ElseIf ($deploymentType -ieq 'Repair')
+  {
     ##*===============================================
     ##* PRE-REPAIR
     ##*===============================================
     [string]$installPhase = 'Pre-Repair'
 
     ## Show Progress Message (with the default message)
-    Show-InstallationProgress
+    Show-InstallationProgress -StatusMessage "We are repairing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
 
     ## <Perform Pre-Repair tasks here>
 
@@ -207,7 +208,7 @@ Try {
 
     ## Handle Zero-Config MSI Repairs
     If ($useDefaultMsi) {
-      [hashtable]$ExecuteDefaultMSISplat = @{ Action = 'Repair'; Path = $defaultMsiFile; }; If ($defaultMstFile) { $ExecuteDefaultMSISplat.Add('Transform', $defaultMstFile) }
+      [hashtable]$ExecuteDefaultMSISplat =  @{ Action = 'Repair'; Path = $defaultMsiFile; }; If ($defaultMstFile) { $ExecuteDefaultMSISplat.Add('Transform', $defaultMstFile) }
       Execute-MSI @ExecuteDefaultMSISplat
     }
     # <Perform Repair tasks here>
@@ -219,14 +220,15 @@ Try {
 
     ## <Perform Post-Repair tasks here>
 
-  }
+    }
   ##*===============================================
   ##* END SCRIPT BODY
   ##*===============================================
 
   ## Call the Exit-Script function to perform final cleanup operations
   Exit-Script -ExitCode $mainExitCode
-} Catch {
+}
+Catch {
   [int32]$mainExitCode = 60001
   [string]$mainErrorMessage = "$(Resolve-Error)"
   Write-Log -Message $mainErrorMessage -Severity 3 -Source $deployAppScriptFriendlyName
