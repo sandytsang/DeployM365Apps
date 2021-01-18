@@ -1,5 +1,5 @@
 <Configuration ID="12f4326f-1674-4ef5-9ffb-2d006fcb7723">
-  <Add OfficeClientEdition="32" Channel="SemiAnnual" MigrateArch="TRUE">
+  <Add OfficeClientEdition="64" Channel="SemiAnnual" MigrateArch="TRUE">
     <Product ID="O365ProPlusRetail">
       <Language ID="en-us" />
       <Language ID="MatchPreviousMSI" />
@@ -26,7 +26,7 @@
   <Updates Enabled="TRUE" />
   <RemoveMSI />
   <AppSettings>
-    <Setup Name="Company" Value="McKinstry Co, LLC." />
+    <Setup Name="Company" Value="Company Name" />
     <User Key="software\microsoft\office\16.0\common" Name="sendcustomerdata" Value="0" Type="REG_DWORD" App="office16" Id="L_Sendcustomerdata" />
     <User Key="software\microsoft\office\16.0\common" Name="updatereliabilitydata" Value="1" Type="REG_DWORD" App="office16" Id="L_UpdateReliabilityPolicy" />
     <User Key="software\microsoft\office\16.0\excel\options" Name="defaultformat" Value="51" Type="REG_DWORD" App="excel16" Id="L_SaveExcelfilesas" />
