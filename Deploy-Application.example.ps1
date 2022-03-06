@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 	This script performs the installation or uninstallation of an application(s).
 	# LICENSE #
@@ -22,13 +22,13 @@
 .PARAMETER DisableLogging
 	Disables logging to file for the script. Default is: $false.
 .EXAMPLE
-	powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeployMode 'Silent'; Exit $LastExitCode }"
+    powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeployMode 'Silent'; Exit $LastExitCode }"
 .EXAMPLE
-	powershell.exe -Command "& { & '.\Deploy-Application.ps1' -AllowRebootPassThru; Exit $LastExitCode }"
+    powershell.exe -Command "& { & '.\Deploy-Application.ps1' -AllowRebootPassThru; Exit $LastExitCode }"
 .EXAMPLE
-	powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeploymentType 'Uninstall'; Exit $LastExitCode }"
+    powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeploymentType 'Uninstall'; Exit $LastExitCode }"
 .EXAMPLE
-	Deploy-Application.exe -DeploymentType "Install" -DeployMode "Silent"
+    Deploy-Application.exe -DeploymentType "Install" -DeployMode "Silent"
 .NOTES
 	Toolkit Exit Code Ranges:
 	60000 - 68999: Reserved for built-in exit codes in Deploy-Application.ps1, Deploy-Application.exe, and AppDeployToolkitMain.ps1
@@ -61,15 +61,15 @@ Try {
 	##* VARIABLE DECLARATION
 	##*===============================================
 	## Variables: Application
-  [string]$appVendor = 'Microsoft Corporation'
-  [string]$appName = '365 Apps for Enterprise'
-  [string]$appVersion = '' # No need to display this!
-  [string]$appArch = 'x64'
-  [string]$appLang = 'EN'
-  [string]$appRevision = '01'
-  [string]$appScriptVersion = '1.3.0'
-  [string]$appScriptDate = '2022-03-06'
-  [string]$appScriptAuthor = 'Cameron Kollwitz (Original by Sandy Zeng)'
+	[string]$appVendor = ''
+	[string]$appName = ''
+	[string]$appVersion = ''
+	[string]$appArch = ''
+	[string]$appLang = 'EN'
+	[string]$appRevision = '01'
+	[string]$appScriptVersion = '1.0.0'
+	[string]$appScriptDate = 'XX/XX/20XX'
+	[string]$appScriptAuthor = '<author name>'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
 	[string]$installName = ''
@@ -117,11 +117,11 @@ Try {
 		[string]$installPhase = 'Pre-Installation'
 
 		## Show Welcome Message, close Internet Explorer if required, allow up to 3 deferrals, verify there is enough disk space to complete the install, and persist the prompt
-		Show-InstallationWelcome -CloseApps "MSACCESS,EXCEL,INFOPATH,ONENOTEM,GROOVE,ONENOTE,OUTLOOK,POWERPNT,WINPROJ,MSPUB,SPDESIGN,lync,VISIO,WINWORD,Teams,Onedrive" -AllowDeferCloseApps -AllowDefer -DeferDays "1" -CloseAppsCountdown "5400" -PersistPrompt -BlockExecution
+		Show-InstallationWelcome -CloseApps 'iexplore' -AllowDefer -DeferTimes 3 -CheckDiskSpace -PersistPrompt
 
 		## Show Progress Message (with the default message)
-		Show-InstallationProgress -StatusMessage "We are installing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
-	
+		Show-InstallationProgress
+
 		## <Perform Pre-Installation tasks here>
 
 
@@ -137,7 +137,7 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -WaitForMsiExec "/configure `"$dirSupportFiles\Install.xml`""	
+
 
 		##*===============================================
 		##* POST-INSTALLATION
@@ -147,7 +147,7 @@ Try {
 		## <Perform Post-Installation tasks here>
 
 		## Display a message at the end of the install
-		#If (-not $useDefaultMsi) { Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait }
+		If (-not $useDefaultMsi) { Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait }
 	}
 	ElseIf ($deploymentType -ieq 'Uninstall')
 	{
@@ -157,12 +157,13 @@ Try {
 		[string]$installPhase = 'Pre-Uninstallation'
 
 		## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
-		Show-InstallationWelcome -CloseApps "MSACCESS,EXCEL,INFOPATH,ONENOTEM,GROOVE,ONENOTE,OUTLOOK,POWERPNT,WINPROJ,MSPUB,SPDESIGN,lync,VISIO,WINWORD,Teams,Onedrive" -AllowDeferCloseApps -AllowDefer -DeferDays "1" -CloseAppsCountdown "5400" -PersistPrompt -BlockExecution
+		Show-InstallationWelcome -CloseApps 'iexplore' -CloseAppsCountdown 60
 
 		## Show Progress Message (with the default message)
-		Show-InstallationProgress -StatusMessage "We are removing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
-	
+		Show-InstallationProgress
+
 		## <Perform Pre-Uninstallation tasks here>
+
 
 		##*===============================================
 		##* UNINSTALLATION
@@ -177,13 +178,14 @@ Try {
 
 		# <Perform Uninstallation tasks here>
 
+
 		##*===============================================
 		##* POST-UNINSTALLATION
 		##*===============================================
 		[string]$installPhase = 'Post-Uninstallation'
 
 		## <Perform Post-Uninstallation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -WaitForMsiExec "/configure `"$dirSupportFiles\Uninstall.xml`""
+
 
 	}
 	ElseIf ($deploymentType -ieq 'Repair')
@@ -217,7 +219,8 @@ Try {
 
 		## <Perform Post-Repair tasks here>
 
-	}
+
+    }
 	##*===============================================
 	##* END SCRIPT BODY
 	##*===============================================

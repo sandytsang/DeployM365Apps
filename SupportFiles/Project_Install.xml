@@ -1,5 +1,5 @@
 <Configuration ID="1936281a-92e9-4659-a82c-de1be7772c53">
-  <Add OfficeClientEdition="64" Channel="SemiAnnual" MigrateArch="TRUE">
+  <Add OfficeClientEdition="64" Channel="Current" MigrateArch="TRUE">
     <Product ID="ProjectProRetail">
       <Language ID="en-us" />
       <Language ID="MatchPreviousMSI" />
