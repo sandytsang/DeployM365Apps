@@ -1,5 +1,5 @@
 <Configuration ID="f440b6a0-ff8e-4a05-8a2e-eaa912e76ae6">
-  <Add OfficeClientEdition="64" Channel="SemiAnnual" MigrateArch="TRUE">
+  <Add OfficeClientEdition="64" Channel="Current" MigrateArch="TRUE">
     <Product ID="VisioProRetail">
       <Language ID="en-us" />
       <Language ID="MatchPreviousMSI" />

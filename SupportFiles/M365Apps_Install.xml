@@ -1,10 +1,9 @@
 <Configuration ID="12f4326f-1674-4ef5-9ffb-2d006fcb7723">
-  <Add OfficeClientEdition="64" Channel="SemiAnnual" MigrateArch="TRUE">
+  <Add OfficeClientEdition="64" Channel="Current" MigrateArch="TRUE">
     <Product ID="O365ProPlusRetail">
       <Language ID="en-us" />
       <Language ID="MatchPreviousMSI" />
       <ExcludeApp ID="Groove" />
-      <ExcludeApp ID="OneNote" />
       <ExcludeApp ID="Lync" />
       <ExcludeApp ID="Bing" />
     </Product>
