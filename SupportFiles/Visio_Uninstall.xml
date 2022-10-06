@@ -1,0 +1,9 @@
+<Configuration>
+	<Remove>
+		<Product ID="VisioProRetail" >
+			<Language ID="en-us" />
+		</Product>
+	</Remove>
+  <Display Level="Full" />
+  <Logging Name="VisioProRetailUninstall.txt" Path="%SystemDrive%\Windows\Logs\Software" />
+</Configuration>

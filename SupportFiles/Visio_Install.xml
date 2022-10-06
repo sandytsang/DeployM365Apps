@@ -1,0 +1,29 @@
+<Configuration ID="f440b6a0-ff8e-4a05-8a2e-eaa912e76ae6">
+  <Add OfficeClientEdition="64" Channel="Current" MigrateArch="TRUE">
+    <Product ID="VisioProRetail">
+      <Language ID="en-us" />
+      <Language ID="MatchPreviousMSI" />
+      <ExcludeApp ID="Groove" />
+      <ExcludeApp ID="OneDrive" />
+    </Product>
+    <Product ID="LanguagePack">
+      <Language ID="en-us" />
+      <Language ID="MatchPreviousMSI" />
+    </Product>
+  </Add>
+  <Property Name="SharedComputerLicensing" Value="0" />
+  <Property Name="PinIconsToTaskbar" Value="TRUE" />
+  <Property Name="SCLCacheOverride" Value="0" />
+  <Property Name="AUTOACTIVATE" Value="0" />
+  <Property Name="FORCEAPPSHUTDOWN" Value="TRUE" />
+  <Property Name="DeviceBasedLicensing" Value="0" />
+  <Updates Enabled="TRUE" />
+  <RemoveMSI />
+  <AppSettings>
+    <Setup Name="Company" Value="Company Name" />
+    <User Key="software\microsoft\office\16.0\common" Name="sendcustomerdata" Value="0" Type="REG_DWORD" App="office16" Id="L_Sendcustomerdata" />
+    <User Key="software\microsoft\office\16.0\common" Name="updatereliabilitydata" Value="1" Type="REG_DWORD" App="office16" Id="L_UpdateReliabilityPolicy" />
+  </AppSettings>
+  <Display Level="Full" AcceptEULA="TRUE" />
+  <Logging Level="Standard" Path="%SystemDrive%\Windows\Logs\Software" />
+</Configuration>

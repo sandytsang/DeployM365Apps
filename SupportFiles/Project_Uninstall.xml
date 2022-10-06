@@ -1,0 +1,9 @@
+<Configuration>
+	<Remove>
+		<Product ID="ProjectProRetail">
+			<Language ID="en-us" />
+		</Product>
+	</Remove>
+  <Display Level="Full" />
+	<Logging Name="ProjectProRetailUninstall.txt" Path="%SystemDrive%\Windows\Logs\Software" />
+</Configuration>

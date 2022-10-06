@@ -1,0 +1,7 @@
+# CHANGELOG
+
+2022-03-06 - Update PSADT to `3.8.4` from `3.8.3`.
+             Update Update Channel to `Current` from `SemiAnnual`.
+
+2021-01-17 - Update to new repository.
+             Update scripts to PowerShell Application Deployment Toolkit 3.8.3 from 3.8.2.

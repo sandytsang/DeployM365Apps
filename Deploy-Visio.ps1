@@ -22,13 +22,13 @@
 .PARAMETER DisableLogging
 	Disables logging to file for the script. Default is: $false.
 .EXAMPLE
-    powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeployMode 'Silent'; Exit $LastExitCode }"
+	powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeployMode 'Silent'; Exit $LastExitCode }"
 .EXAMPLE
-    powershell.exe -Command "& { & '.\Deploy-Application.ps1' -AllowRebootPassThru; Exit $LastExitCode }"
+	powershell.exe -Command "& { & '.\Deploy-Application.ps1' -AllowRebootPassThru; Exit $LastExitCode }"
 .EXAMPLE
-    powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeploymentType 'Uninstall'; Exit $LastExitCode }"
+	powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeploymentType 'Uninstall'; Exit $LastExitCode }"
 .EXAMPLE
-    Deploy-Application.exe -DeploymentType "Install" -DeployMode "Silent"
+	Deploy-Application.exe -DeploymentType "Install" -DeployMode "Silent"
 .NOTES
 	Toolkit Exit Code Ranges:
 	60000 - 68999: Reserved for built-in exit codes in Deploy-Application.ps1, Deploy-Application.exe, and AppDeployToolkitMain.ps1
@@ -61,15 +61,15 @@ Try {
 	##* VARIABLE DECLARATION
 	##*===============================================
 	## Variables: Application
-	[string]$appVendor = 'Microsoft'
-	[string]$appName = 'Visio'
-	[string]$appVersion = ''
-	[string]$appArch = 'x64'
-	[string]$appLang = 'EN'
-	[string]$appRevision = '01'
-	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = '07/08/2020'
-	[string]$appScriptAuthor = 'Sandy Zeng'
+  [string]$appVendor = 'Microsoft Corporation'
+  [string]$appName = 'Visio'
+  [string]$appVersion = '' # No need to display this!
+  [string]$appArch = 'x64'
+  [string]$appLang = 'EN'
+  [string]$appRevision = '01'
+  [string]$appScriptVersion = '1.3.0'
+  [string]$appScriptDate = '2022-03-06'
+  [string]$appScriptAuthor = 'Cameron Kollwitz (Original by Sandy Zeng)'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
 	[string]$installName = ''
@@ -83,8 +83,8 @@ Try {
 
 	## Variables: Script
 	[string]$deployAppScriptFriendlyName = 'Deploy Application'
-	[version]$deployAppScriptVersion = [version]'3.8.2'
-	[string]$deployAppScriptDate = '08/05/2020'
+	[version]$deployAppScriptVersion = [version]'3.8.4'
+	[string]$deployAppScriptDate = '26/01/2021'
 	[hashtable]$deployAppScriptParameters = $psBoundParameters
 
 	## Variables: Environment
@@ -120,8 +120,8 @@ Try {
 		Show-InstallationWelcome -CloseApps "MSACCESS,EXCEL,INFOPATH,ONENOTEM,GROOVE,ONENOTE,OUTLOOK,POWERPNT,WINPROJ,MSPUB,SPDESIGN,lync,VISIO,WINWORD,Teams,Onedrive" -AllowDeferCloseApps -AllowDefer -DeferDays "1" -CloseAppsCountdown "5400" -PersistPrompt -BlockExecution
 
 		## Show Progress Message (with the default message)
-		Show-InstallationProgress -StatusMessage "We are insalling $installTitle. Please wait!" -WindowLocation 'BottomRight' -TopMost $false
-
+		Show-InstallationProgress -StatusMessage "We are installing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
+	
 		## <Perform Pre-Installation tasks here>
 
 
@@ -137,11 +137,7 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirFiles\Visio_Install.xml`""
-			
-		## Force update group policy
-		gpupdate /force /wait:0
-
+		Execute-Process -Path "$dirFiles\setup.exe" -WaitForMsiExec "/configure `"$dirSupportFiles\Visio_Install.xml`""	
 
 		##*===============================================
 		##* POST-INSTALLATION
@@ -149,8 +145,6 @@ Try {
 		[string]$installPhase = 'Post-Installation'
 
 		## <Perform Post-Installation tasks here>
-		## Popup notification for restart
-		Show-InstallationRestartPrompt -Countdownseconds 4500 -CountdownNoHideSeconds 600	
 
 		## Display a message at the end of the install
 		#If (-not $useDefaultMsi) { Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait }
@@ -166,10 +160,9 @@ Try {
 		Show-InstallationWelcome -CloseApps "MSACCESS,EXCEL,INFOPATH,ONENOTEM,GROOVE,ONENOTE,OUTLOOK,POWERPNT,WINPROJ,MSPUB,SPDESIGN,lync,VISIO,WINWORD,Teams,Onedrive" -AllowDeferCloseApps -AllowDefer -DeferDays "1" -CloseAppsCountdown "5400" -PersistPrompt -BlockExecution
 
 		## Show Progress Message (with the default message)
-		Show-InstallationProgress -StatusMessage "We are remvoing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
-
+		Show-InstallationProgress -StatusMessage "We are removing $installTitle. Please wait." -WindowLocation 'BottomRight' -TopMost $false
+	
 		## <Perform Pre-Uninstallation tasks here>
-
 
 		##*===============================================
 		##* UNINSTALLATION
@@ -183,7 +176,6 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		Execute-Process -Path "$dirFiles\setup.exe" -Parameters "/configure `"$dirFiles\Visio_Uninstall.xml`""			
 
 		##*===============================================
 		##* POST-UNINSTALLATION
@@ -191,7 +183,7 @@ Try {
 		[string]$installPhase = 'Post-Uninstallation'
 
 		## <Perform Post-Uninstallation tasks here>
-
+		Execute-Process -Path "$dirFiles\setup.exe" -WaitForMsiExec "/configure `"$dirSupportFiles\Visio_Uninstall.xml`""
 
 	}
 	ElseIf ($deploymentType -ieq 'Repair')
@@ -214,7 +206,7 @@ Try {
 		## Handle Zero-Config MSI Repairs
 		If ($useDefaultMsi) {
 			[hashtable]$ExecuteDefaultMSISplat =  @{ Action = 'Repair'; Path = $defaultMsiFile; }; If ($defaultMstFile) { $ExecuteDefaultMSISplat.Add('Transform', $defaultMstFile) }
-		Execute-MSI @ExecuteDefaultMSISplat
+			Execute-MSI @ExecuteDefaultMSISplat
 		}
 		# <Perform Repair tasks here>
 
@@ -225,8 +217,7 @@ Try {
 
 		## <Perform Post-Repair tasks here>
 
-
-    }
+	}
 	##*===============================================
 	##* END SCRIPT BODY
 	##*===============================================
